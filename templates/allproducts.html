@@ -1,0 +1,7 @@
+<h1>All products</h1>
+<!-- <p>{{pro}}</p> -->
+ {% for i in pro  %}
+
+ <a href="{% url 'prodetails' i.id %}"> <p>{{i}}</p> </a>
+
+ {% endfor %}
