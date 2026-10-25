@@ -4,18 +4,27 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+class Category(models.Model):
+        name = models.CharField(max_length=100)
+        des = models.TextField()
+
+        def __str__(self):
+            return self.name
+
+
 class Products(models.Model):
 
     name = models.CharField(max_length=20)
     description = models.TextField()
     price = models.IntegerField()
-    category = models.CharField()
     image = models.ImageField(null=True,upload_to='photos')
     stock = models.PositiveIntegerField()
     created_at = models.DateTimeField(null=True,auto_now_add=True)
     updated_at = models.DateTimeField(null=True,auto_now=True)
     is_available = models.BooleanField()
     slug = models.SlugField(null=True,blank=True)
+    cat = models.ForeignKey(Category,on_delete=models.CASCADE,null=True)
+
 
     def save(self):
         self.slug = slugify(self.name)
@@ -32,7 +41,7 @@ class Customer(models.Model):
     pincode = models.CharField()
 
     def __str__(self):
-        return self.user.username
+        return self.user.username  
 
 class Cart(models.Model):
     user = models.ForeignKey(Customer,on_delete=models.CASCADE,null=True)
@@ -74,3 +83,5 @@ class Order(models.Model):
 
     def __str__(self):
         return self.user.user.username
+
+   

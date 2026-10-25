@@ -7,4 +7,5 @@ admin.site.register(Products),
 admin.site.register(Customer),
 admin.site.register(Cart),
 admin.site.register(CartItem),
-admin.site.register(Order)
+admin.site.register(Order),
+admin.site.register(Category)

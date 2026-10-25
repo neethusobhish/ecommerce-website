@@ -1,5 +1,6 @@
-from django.shortcuts import render
-from .models import Products
+from django.shortcuts import render,redirect
+from .models import *
+from .forms import *
 
 # Create your views here.
 
@@ -11,3 +12,35 @@ def allproductspage(request):
 def productdetailpage(request,pid):
     pro= Products.objects.get(id=pid)
     return render(request,'prodetails.html',{'pro':pro})
+
+def allcategorypage(request):
+    cat = Category.objects.all()
+    return render (request,'allcategory.html',{'cat':cat})
+
+
+def categoryitemspage(request,cid):
+    catitems = Products.objects.filter(cat_id=cid)
+    return render(request,'categoryitems.html',{'catitems':catitems})
+
+
+def addproductpage(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect(allproductspage)
+    else:
+        form = ProductForm() 
+    return render(request,'addproducts.html',{'form':form}) 
+
+
+def addcategorypage(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(allcategorypage)
+    else:
+        form = CategoryForm()
+    return render(request,'addcategory.html',{'form':form})
+
