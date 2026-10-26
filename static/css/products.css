@@ -3,3 +3,12 @@
     height: 100px;
 
 }
+
+.table{
+    text-align: center;
+    padding: 10px;
+    border-collapse: collapse;
+}
+.row{
+    border: 1px solid black;
+}

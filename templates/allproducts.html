@@ -8,18 +8,23 @@
 </head>
 <body>
     <h1>All products</h1>
-<!-- <p>{{pro}}</p> -->
- {% for i in pro  %}
-
- <a href="{% url 'prodetails' i.id %}"> 
-    <p>{{i.name}}</p>
-    <p>{{i.description}}</p>
-    <p>{{i.price}}</p>
-    <p>{{i.category}}</p>
-    <p>{{i.stock}}</p>
-    <img src="{{i.image}}" alt="" class="image">
-</a>
-
- {% endfor %}
+    <!-- <p>{{pro}}</p> -->
+    <table class="table">
+        <tr class="table row">
+            <td class="table row">Name</td>
+            <td class="table row">Details</td>
+            <td class="table row">Edit</td>
+            <td class="table row">Delete</td>
+        </tr>
+        {% for i in pro %}
+        <tr>
+            <td class="table row">{{i.name}}<img src="{{i.image}}" alt="" class="image"></td>
+            <td class="table row"><a href="{% url 'prodetails' i.id %}"> view</a></td>
+            <td class="table row"><a href="{% url 'edit_products' i.id %}">Edit</a></td>
+            <td class="table row"><a href= "{% url 'delete_product' i.id %}">Delete</a></td>
+        </tr>
+        {% endfor %}
+        
+    </table>
 </body>
 </html>

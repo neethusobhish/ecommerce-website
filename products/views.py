@@ -44,3 +44,21 @@ def addcategorypage(request):
         form = CategoryForm()
     return render(request,'addcategory.html',{'form':form})
 
+def editproductpage(request,pid):
+    pro = Products.objects.get(id=pid)
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST,request.FILES,instance=pro)
+        if form.is_valid():
+            form.save()
+            return redirect(allproductspage)
+    else:
+        form = ProductForm(instance=pro)
+    return render(request,'editproduct.html',{'form':form})
+
+def deleteproductpage(request,pid):
+    pro = Products.objects.get(id=pid)
+    pro.delete()
+    return redirect(allproductspage)
+
+
