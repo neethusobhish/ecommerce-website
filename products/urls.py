@@ -15,6 +15,8 @@ urlpatterns = [
     path('allcategory',allcategorypage),
     path('categoryitems/<int:cid>',categoryitemspage,name='categoryitems'),
     path('addproducts',addproductpage),
-    path('addcategory',addcategorypage)
+    path('addcategory',addcategorypage),
+    path('editproduct/<int:pid>',editproductpage,name='edit_products'),
+    path('deletepro/<int:pid>',deleteproductpage,name='delete_product')
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
