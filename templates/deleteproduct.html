@@ -1,0 +1,10 @@
+delete
+<form method="POST" >
+{% csrf_token %}
+<p>are you sure want to delete ?</p>
+<input type="submit" value="Delete">
+</form>
+
+<a href="{%  url 'allproduct'%} ">
+<button>No</button></a>
+<!-- {{pro}} -->

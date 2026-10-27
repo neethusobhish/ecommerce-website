@@ -1,6 +1,9 @@
 from django.shortcuts import render,redirect
 from .models import *
 from .forms import *
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .serializer import *
 
 # Create your views here.
 
@@ -58,7 +61,28 @@ def editproductpage(request,pid):
 
 def deleteproductpage(request,pid):
     pro = Products.objects.get(id=pid)
-    pro.delete()
-    return redirect(allproductspage)
+
+    if request.method=='POST':
+        pro.delete()
+        return redirect(allproductspage)
+    else:
+        return render(request,'deleteproduct.html',{'pro':pro})
+    # pro.delete()
+    # return redirect(allproductspage)
 
 
+# api
+
+@api_view(['GET'])
+def allproductsapi(request):
+    product= Products.objects.all()
+    serializer = ProductSerializer(product,many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def allcategoryapi(request):
+    category = Category.objects.all()
+    serializer = CategorySerializer(category,many=True)
+    return Response(serializer.data)
+    
