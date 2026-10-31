@@ -1,4 +1,7 @@
-delete
+{% extends 'base.html' %}
+
+
+{% block content%}
 <form method="POST" >
 {% csrf_token %}
 <p>are you sure want to delete ?</p>
@@ -8,3 +11,4 @@ delete
 <a href="{%  url 'allproduct'%} ">
 <button>No</button></a>
 <!-- {{pro}} -->
+ {% endblock %}
