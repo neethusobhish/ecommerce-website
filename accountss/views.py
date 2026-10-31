@@ -30,6 +30,6 @@ def registerpage(request):
             return redirect(loginpage)
     else:
         form = RegisterForm()
-    return redirect (request,'register.html',{'form':form})
+    return render (request,'register.html',{'form':form})
 
 

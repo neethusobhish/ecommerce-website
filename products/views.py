@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .models import *
 from .forms import *
 from rest_framework.response import Response
@@ -71,7 +71,84 @@ def deleteproductpage(request,pid):
     # return redirect(allproductspage)
 
 
-# api
+# add product to cart (with choosen quantity)
+def add_to_cart(request,product_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    if request.method =='POST':
+        prodct = Products.objects.get(id=product_id)
+        quantity = int(request.POST.get('quantity',1))
+
+    item = CartItem.objects.filter(user=request.user, product=prodct).first()
+    if item:
+        item.quantity +=quantity
+        item.save()
+    else:
+        CartItem.objects.create(user=request.user,product=prodct,quantity=quantity)
+
+    return redirect(allproductspage)
+
+
+# 4. View cart: all items + grand total
+def view_cartpage(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+
+    items = CartItem.objects.filter(user=request.user)
+    grand_total = 0
+    for item in items:
+        grand_total += item.total_price()
+
+    return render(request, "cart.html", {"items": items, "grand_total": grand_total})
+
+
+# 5. Increase quantity by 1
+def increase_quantity(request, item_id):
+    if not request.user.is_authenticated:
+        return redirect("login")
+
+    item =CartItem.objects.get(id=item_id, user=request.user)
+    item.quantity += 1
+    item.save()
+    return redirect(view_cartpage)
+
+
+# 6. Decrease quantity by 1 (remove the item if it reaches 0)
+def decrease_quantity(request, item_id):
+    if not request.user.is_authenticated:
+        return redirect("login")
+
+    item = CartItem.objects.get(id=item_id, user=request.user)
+    item.quantity -= 1
+    if item.quantity <= 0:
+        item.delete()
+    else:
+        item.save()
+    return redirect(view_cartpage)
+
+
+# 7. Remove an item completely
+def remove_item(request, item_id):
+    if not request.user.is_authenticated:
+        return redirect("login")
+
+    item =CartItem.objects.get( id=item_id, user=request.user)
+    item.delete()
+    return redirect(view_cartpage)
+
+
+
+
+
+
+
+
+
+
+
+
+# api   
 
 @api_view(['GET'])
 def allproductsapi(request):

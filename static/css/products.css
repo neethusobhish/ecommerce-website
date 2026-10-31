@@ -1,14 +1,26 @@
+.body{
+    margin: 0;
+    padding: 0;
+}
+
 .image{
     width:100px;
     height: 100px;
 
 }
 
-.table{
+.protable{
     text-align: center;
     padding: 10px;
     border-collapse: collapse;
 }
-.row{
+.prorow{
     border: 1px solid black;
+}
+.basemain{
+    min-height: 700px;
+}
+.allpro{
+    padding: 2%;
+    margin:10px;
 }

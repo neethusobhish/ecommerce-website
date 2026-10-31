@@ -51,12 +51,18 @@ class Cart(models.Model):
         return self.user.user.username
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart,on_delete=models.CASCADE,null=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null = True)
+    # cart = models.ForeignKey(Cart,on_delete=models.CASCADE,null=True,blank=True)
     product = models.ForeignKey(Products,on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField(default=1)
+
+    def total_price(self):
+        return self.product.price*self.quantity
+
+
 
     def __str__(self):
-        return self.cart.user.user.username
+        return self.user.first_name
 
 
 class Order(models.Model):
