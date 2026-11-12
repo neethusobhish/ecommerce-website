@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - All Products</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    color: #333;
+}
+
+/* Layout */
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* Main */
+.main {
+    flex: 1;
+    padding: 30px;
+    min-width: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.header h1 {
+    font-size: 27px;
+}
+
+.add-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.add-btn:hover {
+    background: #1d4ed8;
+}
+
+/* Summary */
+.summary {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px #ddd;
+}
+
+.summary h3 {
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.summary h2 {
+    color: #2563eb;
+}
+
+/* Product section */
+.product-section {
+    background: white;
+    padding: 22px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #ddd;
+}
+
+.product-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.search {
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 250px;
+    max-width: 100%;
+}
+
+/* Table */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 750px;
+}
+
+th, td {
+    padding: 15px 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+th {
+    background: #f7f8fa;
+    color: #555;
+}
+
+.product-img {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 7px;
+}
+
+.status {
+    background: #dcfce7;
+    color: #15803d;
+    padding: 6px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+}
+
+.actions button {
+    border: none;
+    padding: 7px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 2px;
+}
+
+.view {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.edit {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.delete {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    z-index: 10;
+}
+
+
+.save-btn {
+    background: #2563eb;
+    color: white;
+    padding: 11px 18px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 18px;
+    cursor: pointer;
+}
+
+.close-btn {
+    background: #ddd;
+    padding: 11px 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 18px;
+}
+
+@media(max-width: 700px) {
+    .main {
+        padding: 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <div class="header">
+            <h1>All Products</h1>
+            <button class="add-btn" onclick="openAddModal()">
+                + Add Product
+            </button>
+        </div>
+
+        <div class="summary">
+            <h3>Total Products</h3>
+            <h2 id="totalProducts">4</h2>
+        </div>
+
+        <div class="product-section">
+
+            <div class="product-top">
+                <h2>Product List</h2>
+                <input type="text"
+                       class="search"
+                       id="search"
+                       placeholder="Search products..."
+                       oninput="displayProducts()">
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Image</th>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="productTable">
+
+                     {% for i in pro %}    
+                    <tr>
+                        <td>${p.id}</td>
+                        <td>
+                            <img src="{{i.image}}"
+                                class="product-img">
+                        </td>
+                        <td>{{i.name}}</td>
+                        <td>${p.category}</td>
+                        <td>₹${p.price}</td>
+                        <td>${p.stock}</td>
+                        <td>
+                            <span class="status">
+                                ${p.stock > 0 ? "Available" : "Out of Stock"}
+                            </span>
+                        </td>
+                        <td class="actions">
+                            <button class="view" onclick="viewProduct(${p.id})">
+                                View
+                            </button>
+                            <button class="edit" onclick="editProduct(${p.id})">
+                                Edit
+                            </button>
+                            <button class="delete" onclick="deleteProduct(${p.id})">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

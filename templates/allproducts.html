@@ -2,32 +2,27 @@
 
 
 {% block content%}
-<div  class="allpro"> 
-    <div class="allpro">
-        <h1 class="allpro">All products</h1>
-    </div>    
-    <!-- <p>{{pro}}</p> -->
+
+
+<!-- Products -->
     <div class="allpro"> 
         <a href="{% url 'addproduct' %}"><button> Add product</button></a>
     </div>
-    <div class="allpro">
-        <table class="protable">
-        <tr class="protable prorow">
-            <td class="protable prorow">Name</td>
-            <td class="protable prorow">Details</td>
-            <td class="protable prorow">Edit</td>
-            <td class="protable prorow">Delete</td>
-        </tr>
-        {% for i in pro %}
-        <tr>
-            <td class="protable prorow">{{i.name}}<img src="{{i.image}}" alt="" class="image"></td>
-            <td class="protable prorow"><a href="{% url 'prodetails' i.id %}"> view</a></td>
-            <td class="protable prorow"><a href="{% url 'edit_products' i.id %}">Edit</a></td>
-            <td class="protable prorow"><a href= "{% url 'delete_product' i.id %}">Delete</a></td>
-        </tr>
-        {% endfor %}
-</table>
 
-    </div>
-</div>
- {% endblock %}
+    <section class="products" id="products">
+        <h2>All Products</h2>
+
+        <div class="product-list">
+            {% for i in pro %}
+            <div class="product-card">
+                <img src="{{i.image}}" alt="image">
+                <h3>{{i.name}}</h3>
+                <p class="price">₹1,499</p>
+                <button onclick="addToCart()">Add to Cart</button>
+            </div>
+            {% endfor %}
+            
+        </div>
+    </section>
+
+{% endblock %}

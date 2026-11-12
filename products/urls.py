@@ -12,7 +12,7 @@ urlpatterns = [
 
     path('all_products',allproductspage,name='allproduct'),
     path('prodetails/<int:pid>',productdetailpage,name='prodetails'),
-    path('allcategory',allcategorypage),
+    path('allcategory',allcategorypage,name='category'),
     path('categoryitems/<int:cid>',categoryitemspage,name='categoryitems'),
     path('addproducts',addproductpage,name='addproduct'),
     path('addcategory',addcategorypage),
@@ -24,7 +24,7 @@ urlpatterns = [
     path("cart/increase/<int:item_id>/", increase_quantity, name="increase_quantity"),
     path("cart/decrease/<int:item_id>/", decrease_quantity, name="decrease_quantity"),
     path("cart/remove/<int:item_id>/", remove_item, name="remove_item"),
-    
+    path('home',homepage,name='home')
     
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404
+from django.contrib.auth.decorators import login_required
 from .models import *
 from .forms import *
 from rest_framework.response import Response
@@ -7,10 +8,19 @@ from .serializer import *
 
 # Create your views here.
 
+def homepage(request):
+    return render(request,'home.html')
 
+@login_required
 def allproductspage(request):
     pro= Products.objects.all()
-    return render(request,'allproducts.html',{'pro':pro})
+
+    if request.user.is_superuser:
+        print(request.user.is_superuser)
+        return render(request,'ad_allproducts.html',{'pro':pro})
+    else:
+        return render(request,'allproducts.html',{'pro':pro})
+       
 
 def productdetailpage(request,pid):
     pro= Products.objects.get(id=pid)
