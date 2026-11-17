@@ -16,9 +16,9 @@
             {% for i in pro %}
             <div class="product-card">
                 <img src="{{i.image}}" alt="image">
-                <h3>{{i.name}}</h3>
-                <p class="price">₹1,499</p>
-                <button onclick="addToCart()">Add to Cart</button>
+                <a href="{% url 'prodetails' i.id %}"><h3>{{i.name}}</h3></a>
+                <p class="price">{{i.price}}</p>
+                <a href="{% url 'add_to_cart' i.id %}"><button>Add to Cart</button></a>
             </div>
             {% endfor %}
             

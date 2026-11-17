@@ -36,12 +36,62 @@ def categoryitemspage(request,cid):
     return render(request,'categoryitems.html',{'catitems':catitems})
 
 
+
+# ollama connect
+
+import ollama
 def addproductpage(request):
     if request.method == 'POST':
         form = ProductForm(request.POST,request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect(allproductspage)
+            pro = form.save(commit=False)
+            if not pro.description:
+                response = ollama.chat(model='llama3.2:1b', messages=[
+                    {
+                        'role':'user',
+                        'content':
+                        f"""
+                            you are a professional e-commerce copywriter.
+                            write a product description for a {pro.cat.name}.
+                            product name: {pro.name}
+                            
+                            respond in this format only:
+                            description :
+                            <paragraph>
+                            callToAction:
+                            <one sentence CTA>
+                            keep total 120 words.
+                         """
+                        ,
+                    },
+
+                ])
+
+        if not pro.price:
+            response = ollama.chat(model='llama3.2:1b', messages=[
+                {
+                    'role':'user',
+                    'content':
+                    f"""
+                        you are a professional e-commerce price predictor.
+                        predict price of a product in indian rupee and for a product of a {pro.cat.name}.
+                        product name: {pro.name}
+                                    
+                        respond in this format only:
+                        price :
+                              <integer>
+                                   
+                                 """
+                                ,
+                },
+        
+                ])
+        
+
+        pro.description = response.message.content
+        pro.save()    
+
+        return redirect(allproductspage)
     else:
         form = ProductForm() 
     return render(request,'addproducts.html',{'form':form}) 
@@ -85,19 +135,19 @@ def deleteproductpage(request,pid):
 def add_to_cart(request,product_id):
     if not request.user.is_authenticated:
         return redirect('login')
-
-    if request.method =='POST':
+    else:
+        
         prodct = Products.objects.get(id=product_id)
         quantity = int(request.POST.get('quantity',1))
 
-    item = CartItem.objects.filter(user=request.user, product=prodct).first()
-    if item:
-        item.quantity +=quantity
-        item.save()
-    else:
-        CartItem.objects.create(user=request.user,product=prodct,quantity=quantity)
+        item = CartItem.objects.filter(user=request.user, product=prodct).first()
+        if item:
+            item.quantity +=quantity
+            item.save()
+        else:
+            CartItem.objects.create(user=request.user,product=prodct,quantity=quantity)
 
-    return redirect(allproductspage)
+    return redirect(view_cartpage)
 
 
 # 4. View cart: all items + grand total

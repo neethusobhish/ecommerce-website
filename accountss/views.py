@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login,logout 
 from django.http import HttpResponse
 from .forms import RegisterForm
+from products.views import homepage
 
 # Create your views here.
 
@@ -13,13 +14,14 @@ def loginpage(request):
         print(user)
         if user:
             login(request,user)#session
+            return redirect (homepage)
         else:
             print('no such user')
     return render(request,'login.html')
 
 def logoutpage(request):
     logout(request)
-    return HttpResponse('user logged out')
+    return redirect(loginpage)
 
 
 def registerpage(request):

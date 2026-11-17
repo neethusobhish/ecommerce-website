@@ -15,8 +15,8 @@ class Category(models.Model):
 class Products(models.Model):
 
     name = models.CharField(max_length=20)
-    description = models.TextField()
-    price = models.IntegerField()
+    description = models.TextField(blank=True)
+    price = models.IntegerField(blank=True,null=True)
     image = models.ImageField(null=True,upload_to='photos')
     stock = models.PositiveIntegerField()
     created_at = models.DateTimeField(null=True,auto_now_add=True)
