@@ -21,6 +21,7 @@ urlpatterns = [
     path('allproductapi',allproductsapi),
     path('allcategoryapi',allcategoryapi),
     path('cart',view_cartpage,name='viewcart'),
+    path('cart/<int:product_id>/',add_to_cart,name='add_to_cart'),
     path("cart/increase/<int:item_id>/", increase_quantity, name="increase_quantity"),
     path("cart/decrease/<int:item_id>/", decrease_quantity, name="decrease_quantity"),
     path("cart/remove/<int:item_id>/", remove_item, name="remove_item"),
